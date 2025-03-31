@@ -27,8 +27,54 @@ public class Generador {
                 
                 System.out.println("Generado arreglo de tamaño: " + n);
                 
-                // Burbuja(poltiicos)
-                // ElQueSigue(Politicos)
+                AlgoritmoOrdenamiento algoritmo;
+                
+                //Llamado a los algoritmos
+                algoritmo = new BubbleSort();
+                long inicio = System.currentTimeMillis();
+                algoritmo.ordenar(politicos);
+                long fin = System.currentTimeMillis();
+                tiempoTotal = fin - inicio;
+                algoritmo.setTiempoTotal(tiempoTotal)
+                System.out.println(Arrays.toString(algoritmo));
+                System.out.println(algoritmo.toString)
+
+                algoritmo = new InsertionSortSort();
+                long inicio = System.currentTimeMillis();
+                algoritmo.ordenar(politicos);
+                long fin = System.currentTimeMillis();
+                tiempoTotal = fin - inicio;
+                algoritmo.setTiempoTotal(tiempoTotal)
+                System.out.println(Arrays.toString(algoritmo));
+                System.out.println(algoritmo.toString)
+
+                algoritmo = new SelectionSort();
+                long inicio = System.currentTimeMillis();
+                algoritmo.ordenar(politicos);
+                long fin = System.currentTimeMillis();
+                tiempoTotal = fin - inicio;
+                algoritmo.setTiempoTotal(tiempoTotal)
+                System.out.println(Arrays.toString(algoritmo));
+                System.out.println(algoritmo.toString)
+
+                algoritmo = new QuickSort();
+                long inicio = System.currentTimeMillis();
+                algoritmo.ordenar(politicos);
+                long fin = System.currentTimeMillis();
+                tiempoTotal = fin - inicio;
+                algoritmo.setTiempoTotal(tiempoTotal)
+                System.out.println(Arrays.toString(algoritmo));
+                System.out.println(algoritmo.toString)
+
+                algoritmo = new MergeSort();
+                long inicio = System.currentTimeMillis();
+                algoritmo.ordenar(politicos);
+                long fin = System.currentTimeMillis();
+                tiempoTotal = fin - inicio;
+                algoritmo.setTiempoTotal(tiempoTotal)
+                System.out.println(Arrays.toString(algoritmo));
+                System.out.println(algoritmo.toString)
+
                 
                 // Eliminar referencia al arreglo
                 politicos = null;
