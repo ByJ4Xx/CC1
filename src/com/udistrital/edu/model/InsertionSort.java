@@ -1,4 +1,4 @@
-package com.edu.udistrital.modelo;
+package com.udistrital.edu.model;
 
 public class InsertionSort extends AlgoritmoOrdenamiento{
     public InsertionSort() {
