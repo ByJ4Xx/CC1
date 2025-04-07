@@ -2,64 +2,71 @@ package com.udistrital.edu.model;
 
 import java.util.Arrays;
 
-public class MergeSort extends AlgoritmoOrdenamiento {
+public class MergeSort {
 
-    public MergeSort() {
+    private static int comparaciones = 0;
+    private static int intercambios = 0;
+    private static double tiempoTotal;
+
+    public static double[] ordenar(Politico[] arr) {
+    	long inicio = System.currentTimeMillis();
+        mergeSort(arr, 0, arr.length - 1);
+        long fin = System.currentTimeMillis();
+        tiempoTotal = fin - inicio;
+        return new double[] {tiempoTotal, comparaciones, intercambios };
     }
 
-    public MergeSort(long tiempoTotal, int comparaciones, int intercambios) {
-        super(tiempoTotal, comparaciones, intercambios);
+    private static void mergeSort(Politico[] arr, int leftStart, int rightEnd) {
+        int middle = (leftStart + rightEnd) / 2;
+        mergeSort(arr, leftStart, middle); // Ordena la mitad izquierda
+        mergeSort(arr, middle + 1, rightEnd); // Ordena la mitad derecha
+        mergeHalves(arr, leftStart, rightEnd); // Fusiona ambas mitades
     }
-    @Override
-    public Politico[] ordenar(Politico[] arregloPoliticos) {
-        if (arregloPoliticos.length <= 1) return arregloPoliticos;
-        return implementarRecursividad(arregloPoliticos, 0, arregloPoliticos.length - 1);
-    }
-        private Politico[] implementarRecursividad(Politico[] arr, int inicio, int fin) {
-            if (inicio < fin) {
-                int medio = (inicio + fin) / 2;
 
-                implementarRecursividad(arr, inicio, medio);
-                implementarRecursividad(arr, medio + 1, fin);
+    private static void mergeHalves(Politico[] arr, int leftStart, int rightEnd) {
+        int leftEnd = (rightEnd + leftStart) / 2;
+        int rightStart = leftEnd + 1;
+        int size = rightEnd - leftStart + 1;
 
-                combinar(arr, inicio, medio, fin);
+        int left = leftStart;
+        int right = rightStart;
+        int index = leftStart;
+
+        // Fusionamos las mitades de manera ordenada en el mismo arreglo
+        Politico[] temp = new Politico[size];  // Arreglo temporal para la fusión
+        int tempIndex = 0;
+
+        // Primero, fusionamos los elementos de las mitades
+        while (left <= leftEnd && right <= rightEnd) {
+            comparaciones++;  // Se ha hecho una comparación
+            if (arr[left].getDinero() <= arr[right].getDinero()) {
+                temp[tempIndex] = arr[left];
+                left++;
+            } else {
+                temp[tempIndex] = arr[right];
+                right++;
+                intercambios++; // Se realiza un intercambio
             }
-            return arr;
+            tempIndex++;
         }
 
-        private static void combinar(Politico[] arr, int inicio, int medio, int fin) {
-            int n1 = medio - inicio + 1;
-            int n2 = fin - medio;
+        // Si quedaron elementos en la mitad izquierda, los copiamos
+        while (left <= leftEnd) {
+            temp[tempIndex] = arr[left];
+            left++;
+            tempIndex++;
+        }
 
-            Politico[] izquierda = new Politico[n1];
-            Politico[] derecha = new Politico[n2];
+        // Si quedaron elementos en la mitad derecha, los copiamos
+        while (right <= rightEnd) {
+            temp[tempIndex] = arr[right];
+            right++;
+            tempIndex++;
+        }
 
-            System.arraycopy(arr, inicio, izquierda, 0, n1);
-            System.arraycopy(arr, medio + 1, derecha, 0, n2);
-
-            int i = 0, j = 0, k = inicio;
-
-            while (i < n1 && j < n2) {
-                if (izquierda[i].getDinero() <= derecha[j].getDinero()) {
-                    arr[k] = izquierda[i];
-                    i++;
-                } else {
-                    arr[k] = derecha[j];
-                    j++;
-                }
-                k++;
-            }
-
-            while (i < n1) {
-                arr[k] = izquierda[i];
-                i++;
-                k++;
-            }
-
-            while (j < n2) {
-                arr[k] = derecha[j];
-                j++;
-                k++;
-            }
+        // Copiamos los elementos fusionados de vuelta al arreglo original
+        for (int i = 0; i < size; i++) {
+            arr[leftStart + i] = temp[i];
         }
     }
+}

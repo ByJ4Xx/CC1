@@ -1,44 +1,53 @@
 package com.udistrital.edu.model;
 
-public class QuickSort extends AlgoritmoOrdenamiento {
+public class QuickSort {
 
-    public QuickSort() {
+    private static int comparaciones = 0;
+    private static int intercambios = 0;
+    private static double tiempoTotal;
+
+    public static double[] ordenar(Politico[] arr) {
+    	long inicio = System.currentTimeMillis();
+        quickSort(arr, 0, arr.length - 1);
+        long fin = System.currentTimeMillis();
+        tiempoTotal = fin - inicio;
+        return new double[] {tiempoTotal, comparaciones, intercambios };
     }
 
-    public QuickSort(long tiempoTotal, int comparaciones, int intercambios) {
-        super(tiempoTotal, comparaciones, intercambios);
-    }
-
-    @Override
-    public Politico[] ordenar(Politico[] arregloPoliticos) {
-        aplicarRecursividad(arregloPoliticos, 0, arregloPoliticos.length - 1);
-        return arregloPoliticos;
-    }
-
-    private void aplicarRecursividad(Politico[] arr, int low, int high) {
+    private static void quickSort(Politico[] arr, int low, int high) {
         if (low < high) {
-            int pivotIndex = particion(arr, low, high);
-            aplicarRecursividad(arr, low, pivotIndex - 1);
-            aplicarRecursividad(arr, pivotIndex + 1, high);
+            // Particion y obtenemos el indice del pivote
+            int pivotIndex = partition(arr, low, high);
+            // Ordenamos las sublistas de forma recursiva
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
         }
     }
 
-    private static int particion(Politico[] arr, int low, int high) {
+    private static int partition(Politico[] arr, int low, int high) {
+        // Elegimos el ultimo elemento como pivote
         Politico pivot = arr[high];
         int i = low - 1;
+
+        // Comenzamos la comparacion desde el inicio hasta el penultimo elemento
         for (int j = low; j < high; j++) {
+            comparaciones++; // Se hace una comparacion
             if (arr[j].getDinero() <= pivot.getDinero()) {
                 i++;
-                // Intercambiar elementos
-                Politico intercambiador = arr[i];
+                intercambios++; // Realizamos un intercambio
+                // Intercambiamos los elementos arr[i] y arr[j]
+                Politico temp = arr[i];
                 arr[i] = arr[j];
-                arr[j] = intercambiador;
+                arr[j] = temp;
             }
         }
-        // Colocar el pivote en su posición correcta
-        Politico intercambiador = arr[i + 1];
+
+        // Colocamos el pivote en su posicion final
+        Politico temp = arr[i + 1];
         arr[i + 1] = arr[high];
-        arr[high] = intercambiador;
-        return i + 1;
+        arr[high] = temp;
+
+        intercambios++; // Intercambio del pivote con su posicion correcta
+        return i + 1; // Indice de la posicion del pivote
     }
 }
