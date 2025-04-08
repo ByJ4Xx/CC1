@@ -6,6 +6,8 @@ public class SelectionSort {
     private static int intercambios = 0;
 
     public static ResultadoOrdenamiento ordenar(Politico[] arr) {
+        comparaciones = 0;
+        intercambios = 0;
         int n = arr.length;
         long inicio = System.nanoTime();
         // Recorrido del arreglo para encontrar el mínimo elemento en el resto del arreglo

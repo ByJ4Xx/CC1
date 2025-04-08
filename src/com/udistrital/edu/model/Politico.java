@@ -12,6 +12,10 @@ public class Politico {
         this.dinero = dinero;
         this.fechaNacimiento = fechaNacimiento;
     }
+    public int compareTo(Politico otro) {
+        // Si quieres ordenar por dinero ascendente:
+        return Integer.compare(this.dinero, otro.dinero);
+    }
     
     public int getId() { return id; }
     public int getDinero() { return dinero; }

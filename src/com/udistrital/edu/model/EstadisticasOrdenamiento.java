@@ -1,13 +1,14 @@
 package com.udistrital.edu.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EstadisticasOrdenamiento {
     private Map<String, ResultadoOrdenamiento> acumulados = new HashMap<>();
     private Map<String, Integer> conteos = new HashMap<>();
 
-    public void agregarResultado(String algoritmo, ResultadoOrdenamiento resultado) {
+    public synchronized void agregarResultado(String algoritmo, ResultadoOrdenamiento resultado) {
         acumulados.putIfAbsent(algoritmo, new ResultadoOrdenamiento(0, 0, 0));
         conteos.putIfAbsent(algoritmo, 0);
 
@@ -36,5 +37,12 @@ public class EstadisticasOrdenamiento {
             System.out.printf("[%s] Promedio -> Tiempo: %.2f ms, Comparaciones: %d, Intercambios: %d%n",
                 algoritmo, promedio.tiempo, promedio.comparaciones, promedio.intercambios);
         }
+    }
+    public Map<String, ResultadoOrdenamiento> getPromedios() {
+        Map<String, ResultadoOrdenamiento> promedios = new HashMap<>();
+        for (String algoritmo : acumulados.keySet()) {
+            promedios.put(algoritmo, obtenerPromedio(algoritmo));
+        }
+        return promedios;
     }
 }

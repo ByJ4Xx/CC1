@@ -13,8 +13,7 @@ public class Generador {
     int numArreglos = 0;
     
     public void generarAleatorio(int n, double tasaCrecimiento, EstadisticasOrdenamiento estadisticas) {
-        int idBase = 1000;
-        int num = 0;
+        int idBase = 2000;
         Politico[] politicos = null;
         
         try {
@@ -43,7 +42,7 @@ public class Generador {
                 System.gc(); // Liberar memoria
                 
                 n = (int) Math.round(n * tasaCrecimiento);
-                if (n>=152321) {
+                if (n>=88148) {
                 	throw new OutOfMemoryError();
                 }
             }
@@ -51,7 +50,7 @@ public class Generador {
             System.err.println("Se ha agotado la memoria al intentar generar un arreglo de tamaño: " + n);
         }
     }
-    public static void generarOrdenado(int n, double tasaCrecimiento) {
+    public void generarOrdenado(int n, double tasaCrecimiento, EstadisticasOrdenamiento estadisticas) {
     	int idBase = 1000;
         Politico[] politicos = new Politico[n];
         int dineroBase = 100 + random.nextInt(5000);
@@ -68,21 +67,19 @@ public class Generador {
                 	politicos[i].setDinero(dineroBase);
                 	dineroBase += random.nextInt(5000);
                     politicos[i].setFechaNacimiento(LocalDate.of(random.nextInt(60) + 1940, random.nextInt(12) + 1, random.nextInt(28) + 1));
-                    
-                    System.out.println(politicos[i]);
                 }
                 
                 System.out.println("Generado arreglo de tamaño: " + n);
                 
-                // Burbuja(poltiicos)
-                // ElQueSigue(Politicos)
+                // Llamamos al metodo para que los ordene
+                ordenarArreglo(politicos, estadisticas);
                 
                 // Eliminar referencia al arreglo
                 politicos = null;
                 System.gc(); // Liberar memoria
                 
                 n = (int) Math.round(n * tasaCrecimiento);
-                if (n>=155469300) {
+                if (n>=88148) {
                 	throw new OutOfMemoryError();
                 }
             }
@@ -90,16 +87,13 @@ public class Generador {
             System.err.println("Se ha agotado la memoria al intentar generar un arreglo de tamaño: " + n);
         }
     }
-    public static void generarInverso(int n, double tasaCrecimiento) {
+    public void generarInverso(int n, double tasaCrecimiento, EstadisticasOrdenamiento estadisticas) {
     	int idBase = 1000;
         Politico[] politicos = new Politico[n];
         int dineroBase = 100 + random.nextInt(5000);
         int num = 0;
         try {
             while (true) {
-            	if (n>10) {
-                	throw new OutOfMemoryError();
-                }
                 politicos = new Politico[n];
                 num +=1;
                 LocalDate fechaBase = LocalDate.of(random.nextInt(60) + 1940, random.nextInt(12) + 1, random.nextInt(28) + 1);
@@ -111,22 +105,19 @@ public class Generador {
                 	politicos[i].setDinero(dineroBase);
                 	dineroBase += random.nextInt(5000);
                     politicos[i].setFechaNacimiento(LocalDate.of(random.nextInt(60) + 1940, random.nextInt(12) + 1, random.nextInt(28) + 1));
-                    
-                    //System.out.println(politicos[i]);
                 }
                 
                 System.out.println("Generado arreglo de tamaño: " + n);
                 
-                // Burbuja(poltiicos)
-                // ElQueSigue(Politicos)
+                // Llamamos al metodo para que los ordene
+                ordenarArreglo(politicos, estadisticas);
                 
-                // Eliminar referencia al arreglo
                 politicos = null;
-                System.gc(); // Liberar memoria
+                System.gc();
                 idBase = 1000;
                 n = (int) Math.round(n * tasaCrecimiento);
                 // Valor maximo que me dejo Java con 32 GB: 155469300
-                if (n>=152321) {
+                if (n>=88148) {
                 	throw new OutOfMemoryError();
                 }
             }

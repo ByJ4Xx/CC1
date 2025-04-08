@@ -6,6 +6,8 @@ public class QuickSort {
     private static int intercambios = 0;
 
     public static ResultadoOrdenamiento ordenar(Politico[] arr) {
+        comparaciones = 0;
+        intercambios = 0;
     	long inicio = System.nanoTime();
         quickSort(arr, 0, arr.length - 1);
         long fin = System.nanoTime();
@@ -24,29 +26,31 @@ public class QuickSort {
     }
 
     private static int partition(Politico[] arr, int low, int high) {
-        // Elegimos el ultimo elemento como pivote
+        // Elegir índice aleatorio y moverlo al final
+        int randomIndex = low + (int)(Math.random() * (high - low + 1));
+        Politico temp = arr[randomIndex];
+        arr[randomIndex] = arr[high];
+        arr[high] = temp;
+
         Politico pivot = arr[high];
         int i = low - 1;
 
-        // Comenzamos la comparacion desde el inicio hasta el penultimo elemento
         for (int j = low; j < high; j++) {
-            comparaciones++; // Se hace una comparacion
+            comparaciones++;
             if (arr[j].getDinero() <= pivot.getDinero()) {
                 i++;
-                intercambios++; // Realizamos un intercambio
-                // Intercambiamos los elementos arr[i] y arr[j]
-                Politico temp = arr[i];
+                intercambios++;
+                temp = arr[i];
                 arr[i] = arr[j];
                 arr[j] = temp;
             }
         }
 
-        // Colocamos el pivote en su posicion final
-        Politico temp = arr[i + 1];
+        intercambios++;
+        temp = arr[i + 1];
         arr[i + 1] = arr[high];
         arr[high] = temp;
 
-        intercambios++; // Intercambio del pivote con su posicion correcta
-        return i + 1; // Indice de la posicion del pivote
+        return i + 1;
     }
 }
