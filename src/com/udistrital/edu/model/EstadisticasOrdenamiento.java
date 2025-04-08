@@ -1,28 +1,36 @@
 package com.udistrital.edu.model;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class EstadisticasOrdenamiento {
+    
+    // Clave: "Tamaño_Algoritmo", por ejemplo: "1000_QuickSort"
     private Map<String, ResultadoOrdenamiento> acumulados = new HashMap<>();
     private Map<String, Integer> conteos = new HashMap<>();
 
-    public synchronized void agregarResultado(String algoritmo, ResultadoOrdenamiento resultado) {
-        acumulados.putIfAbsent(algoritmo, new ResultadoOrdenamiento(0, 0, 0));
-        conteos.putIfAbsent(algoritmo, 0);
+    public synchronized void agregarResultado(int tamanio, String algoritmo, ResultadoOrdenamiento resultado) {
+        String clave = generarClave(tamanio, algoritmo);
 
-        ResultadoOrdenamiento acumulado = acumulados.get(algoritmo);
+        acumulados.putIfAbsent(clave, new ResultadoOrdenamiento(0, 0, 0));
+        conteos.putIfAbsent(clave, 0);
+
+        ResultadoOrdenamiento acumulado = acumulados.get(clave);
         acumulado.tiempo += resultado.tiempo;
         acumulado.comparaciones += resultado.comparaciones;
         acumulado.intercambios += resultado.intercambios;
 
-        conteos.put(algoritmo, conteos.get(algoritmo) + 1);
+        conteos.put(clave, conteos.get(clave) + 1);
     }
 
-    public ResultadoOrdenamiento obtenerPromedio(String algoritmo) {
-        ResultadoOrdenamiento acumulado = acumulados.get(algoritmo);
-        int conteo = conteos.getOrDefault(algoritmo, 1); // evitar división por 0
+    private String generarClave(int tamanio, String algoritmo) {
+        return tamanio + "_" + algoritmo;
+    }
+
+    public ResultadoOrdenamiento obtenerPromedio(int tamanio, String algoritmo) {
+        String clave = generarClave(tamanio, algoritmo);
+        ResultadoOrdenamiento acumulado = acumulados.get(clave);
+        int conteo = conteos.getOrDefault(clave, 1); // evitar división por 0
 
         return new ResultadoOrdenamiento(
             acumulado.tiempo / conteo,
@@ -30,19 +38,74 @@ public class EstadisticasOrdenamiento {
             acumulado.intercambios / conteo
         );
     }
-
-    public void imprimirPromedios() {
-        for (String algoritmo : acumulados.keySet()) {
-            ResultadoOrdenamiento promedio = obtenerPromedio(algoritmo);
-            System.out.printf("[%s] Promedio -> Tiempo: %.2f ms, Comparaciones: %d, Intercambios: %d%n",
-                algoritmo, promedio.tiempo, promedio.comparaciones, promedio.intercambios);
-        }
-    }
+    
     public Map<String, ResultadoOrdenamiento> getPromedios() {
         Map<String, ResultadoOrdenamiento> promedios = new HashMap<>();
-        for (String algoritmo : acumulados.keySet()) {
-            promedios.put(algoritmo, obtenerPromedio(algoritmo));
+        Map<String, Integer> totalConteos = new HashMap<>();
+        Map<String, ResultadoOrdenamiento> acumuladosGlobales = new HashMap<>();
+
+        for (String clave : acumulados.keySet()) {
+            String[] partes = clave.split("_");
+            String algoritmo = partes[1];
+            
+            ResultadoOrdenamiento parcial = acumulados.get(clave);
+            int conteo = conteos.get(clave);
+
+            acumuladosGlobales.putIfAbsent(algoritmo, new ResultadoOrdenamiento(0, 0, 0));
+            totalConteos.putIfAbsent(algoritmo, 0);
+
+            ResultadoOrdenamiento global = acumuladosGlobales.get(algoritmo);
+            global.tiempo += parcial.tiempo;
+            global.comparaciones += parcial.comparaciones;
+            global.intercambios += parcial.intercambios;
+
+            totalConteos.put(algoritmo, totalConteos.get(algoritmo) + conteo);
         }
+
+        for (String algoritmo : acumuladosGlobales.keySet()) {
+            ResultadoOrdenamiento global = acumuladosGlobales.get(algoritmo);
+            int total = totalConteos.getOrDefault(algoritmo, 1);
+            promedios.put(algoritmo, new ResultadoOrdenamiento(
+                global.tiempo / total,
+                global.comparaciones / total,
+                global.intercambios / total
+            ));
+        }
+
         return promedios;
     }
+
+    public Map<Integer, Map<String, ResultadoOrdenamiento>> getDatos() {
+        Map<Integer, Map<String, ResultadoOrdenamiento>> resultadoFinal = new HashMap<>();
+
+        for (String clave : acumulados.keySet()) {
+            String[] partes = clave.split("_");
+            int tamanio = Integer.parseInt(partes[0]);
+            String algoritmo = partes[1];
+
+            ResultadoOrdenamiento promedio = obtenerPromedio(tamanio, algoritmo);
+
+            resultadoFinal
+                .computeIfAbsent(tamanio, k -> new HashMap<>())
+                .put(algoritmo, promedio);
+        }
+
+        return resultadoFinal;
+    }
+
+    public void imprimirPromedios() {
+        Map<Integer, Map<String, ResultadoOrdenamiento>> promedios = getDatos();
+
+        for (Integer tamanio : promedios.keySet()) {
+            System.out.println("Tamaño de arreglo: " + tamanio);
+            for (Map.Entry<String, ResultadoOrdenamiento> entry : promedios.get(tamanio).entrySet()) {
+                String algoritmo = entry.getKey();
+                ResultadoOrdenamiento promedio = entry.getValue();
+                System.out.printf("  [%s] Promedio -> Tiempo: %.2f ms, Comparaciones: %d, Intercambios: %d%n",
+                    algoritmo, promedio.tiempo, promedio.comparaciones, promedio.intercambios);
+            }
+            System.out.println();
+        }
+    }
 }
+

@@ -130,27 +130,27 @@ public class Generador {
 
         Runnable tareaBubble = () -> {
             Politico[] copia = clonarArreglo(politicos);
-            estadisticas.agregarResultado("BubbleSort", BubbleSort.ordenar(copia));
+            estadisticas.agregarResultado(politicos.length, "BubbleSort", BubbleSort.ordenar(copia));
             copia = null;
         };
         Runnable tareaSelection = () -> {
             Politico[] copia = clonarArreglo(politicos);
-            estadisticas.agregarResultado("SelectionSort", SelectionSort.ordenar(copia));
+            estadisticas.agregarResultado(politicos.length,"SelectionSort", SelectionSort.ordenar(copia));
             copia = null;
         };
         Runnable tareaInsertion = () -> {
             Politico[] copia = clonarArreglo(politicos);
-            estadisticas.agregarResultado("InsertionSort", InsertionSort.ordenar(copia));
+            estadisticas.agregarResultado(politicos.length, "InsertionSort", InsertionSort.ordenar(copia));
             copia = null;
         };
         Runnable tareaMerge = () -> {
             Politico[] copia = clonarArreglo(politicos);
-            estadisticas.agregarResultado("MergeSort", MergeSort.ordenar(copia));
+            estadisticas.agregarResultado(politicos.length, "MergeSort", MergeSort.ordenar(copia));
             copia = null;
         };
         Runnable tareaQuick = () -> {
             Politico[] copia = clonarArreglo(politicos);
-            estadisticas.agregarResultado("QuickSort", QuickSort.ordenar(copia));
+            estadisticas.agregarResultado(politicos.length, "QuickSort", QuickSort.ordenar(copia));
             copia = null;
         };
 

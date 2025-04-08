@@ -1,6 +1,7 @@
 package com.udistrital.edu.controller;
 
 import com.udistrital.edu.model.EstadisticasOrdenamiento;
+import com.udistrital.edu.model.ExportarEstadisticas;
 import com.udistrital.edu.model.Generador;
 import com.udistrital.edu.view.VistaResultados;
 
@@ -22,7 +23,7 @@ public class Controller {
         generador.generarAleatorio(tamano, fCrecimiento, estadisticasAleatorio);
         generador.generarOrdenado(tamano, fCrecimiento, estadisticasOrdenado);
         generador.generarInverso(tamano, fCrecimiento, estadisticasInverso);
-        estadisticasAleatorio.imprimirPromedios();
+        ExportarEstadisticas.exportar("estadisticas.txt", estadisticasAleatorio, estadisticasOrdenado, estadisticasInverso);
 
         new VistaResultados(estadisticasAleatorio, estadisticasOrdenado, estadisticasInverso).setVisible(true);
     }
