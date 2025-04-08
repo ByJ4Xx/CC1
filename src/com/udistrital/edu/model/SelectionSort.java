@@ -4,11 +4,10 @@ public class SelectionSort {
 
     private static int comparaciones = 0;
     private static int intercambios = 0;
-    private static double tiempoTotal;
 
-    public static double[] ordenar(Politico[] arr) {
+    public static ResultadoOrdenamiento ordenar(Politico[] arr) {
         int n = arr.length;
-        long inicio = System.currentTimeMillis();
+        long inicio = System.nanoTime();
         // Recorrido del arreglo para encontrar el mínimo elemento en el resto del arreglo
         for (int i = 0; i < n - 1; i++) {
             int minIndex = i;
@@ -29,8 +28,8 @@ public class SelectionSort {
                 arr[minIndex] = temp;
             }
         }
-        long fin = System.currentTimeMillis();
-        tiempoTotal = fin - inicio;
-        return new double[] {tiempoTotal, comparaciones, intercambios };
+        long fin = System.nanoTime();
+        double tiempoMs = (fin - inicio) / 1000000.0;
+        return new ResultadoOrdenamiento(tiempoMs, comparaciones, intercambios);
     }
 }

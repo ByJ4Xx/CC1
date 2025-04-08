@@ -4,14 +4,13 @@ public class QuickSort {
 
     private static int comparaciones = 0;
     private static int intercambios = 0;
-    private static double tiempoTotal;
 
-    public static double[] ordenar(Politico[] arr) {
-    	long inicio = System.currentTimeMillis();
+    public static ResultadoOrdenamiento ordenar(Politico[] arr) {
+    	long inicio = System.nanoTime();
         quickSort(arr, 0, arr.length - 1);
-        long fin = System.currentTimeMillis();
-        tiempoTotal = fin - inicio;
-        return new double[] {tiempoTotal, comparaciones, intercambios };
+        long fin = System.nanoTime();
+        double tiempoMs = (fin - inicio) / 1000000.0;
+        return new ResultadoOrdenamiento(tiempoMs, comparaciones, intercambios);
     }
 
     private static void quickSort(Politico[] arr, int low, int high) {

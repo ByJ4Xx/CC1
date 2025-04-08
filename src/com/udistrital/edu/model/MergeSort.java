@@ -1,72 +1,58 @@
 package com.udistrital.edu.model;
 
-import java.util.Arrays;
-
 public class MergeSort {
 
     private static int comparaciones = 0;
     private static int intercambios = 0;
-    private static double tiempoTotal;
 
-    public static double[] ordenar(Politico[] arr) {
-    	long inicio = System.currentTimeMillis();
+    public static ResultadoOrdenamiento ordenar(Politico[] arr) {
+        comparaciones = 0;
+        intercambios = 0;
+        long inicio = System.nanoTime();
         mergeSort(arr, 0, arr.length - 1);
-        long fin = System.currentTimeMillis();
-        tiempoTotal = fin - inicio;
-        return new double[] {tiempoTotal, comparaciones, intercambios };
+        long fin = System.nanoTime();
+        double tiempoMs = (fin - inicio) / 1_000_000.0;
+        return new ResultadoOrdenamiento(tiempoMs, comparaciones, intercambios);
     }
 
-    private static void mergeSort(Politico[] arr, int leftStart, int rightEnd) {
-        int middle = (leftStart + rightEnd) / 2;
-        mergeSort(arr, leftStart, middle); // Ordena la mitad izquierda
-        mergeSort(arr, middle + 1, rightEnd); // Ordena la mitad derecha
-        mergeHalves(arr, leftStart, rightEnd); // Fusiona ambas mitades
+    private static void mergeSort(Politico[] arr, int left, int right) {
+        if (left >= right) return;
+
+        int middle = left + (right - left) / 2;
+        mergeSort(arr, left, middle);
+        mergeSort(arr, middle + 1, right);
+        merge(arr, left, middle, right);
     }
 
-    private static void mergeHalves(Politico[] arr, int leftStart, int rightEnd) {
-        int leftEnd = (rightEnd + leftStart) / 2;
-        int rightStart = leftEnd + 1;
-        int size = rightEnd - leftStart + 1;
+    private static void merge(Politico[] arr, int left, int middle, int right) {
+        int size = right - left + 1;
+        Politico[] temp = new Politico[size];
 
-        int left = leftStart;
-        int right = rightStart;
-        int index = leftStart;
+        int i = left;       // inicio de la izquierda
+        int j = middle + 1; // inicio de la derecha
+        int k = 0;          // índice en temp
 
-        // Fusionamos las mitades de manera ordenada en el mismo arreglo
-        Politico[] temp = new Politico[size];  // Arreglo temporal para la fusión
-        int tempIndex = 0;
-
-        // Primero, fusionamos los elementos de las mitades
-        while (left <= leftEnd && right <= rightEnd) {
-            comparaciones++;  // Se ha hecho una comparación
-            if (arr[left].getDinero() <= arr[right].getDinero()) {
-                temp[tempIndex] = arr[left];
-                left++;
+        while (i <= middle && j <= right) {
+            comparaciones++;
+            if (arr[i].getDinero() <= arr[j].getDinero()) {
+                temp[k++] = arr[i++];
             } else {
-                temp[tempIndex] = arr[right];
-                right++;
-                intercambios++; // Se realiza un intercambio
+                temp[k++] = arr[j++];
+                intercambios++;
             }
-            tempIndex++;
         }
 
-        // Si quedaron elementos en la mitad izquierda, los copiamos
-        while (left <= leftEnd) {
-            temp[tempIndex] = arr[left];
-            left++;
-            tempIndex++;
+        while (i <= middle) {
+            temp[k++] = arr[i++];
         }
 
-        // Si quedaron elementos en la mitad derecha, los copiamos
-        while (right <= rightEnd) {
-            temp[tempIndex] = arr[right];
-            right++;
-            tempIndex++;
+        while (j <= right) {
+            temp[k++] = arr[j++];
         }
 
-        // Copiamos los elementos fusionados de vuelta al arreglo original
-        for (int i = 0; i < size; i++) {
-            arr[leftStart + i] = temp[i];
+        // Copiar de vuelta a arr
+        for (int m = 0; m < size; m++) {
+            arr[left + m] = temp[m];
         }
     }
 }

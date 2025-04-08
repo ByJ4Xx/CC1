@@ -1,14 +1,12 @@
 package com.udistrital.edu.model;
 
-import java.time.LocalDate;
-
 public class BubbleSort {
 
-    public static double[] ordenar(Politico[] arregloPoliticos) {
+    public static ResultadoOrdenamiento ordenar(Politico[] arregloPoliticos) {
         int n = arregloPoliticos.length;
-        double tiempoTotal, comparaciones=0, intercambios=0;
+        int comparaciones=0, intercambios=0;
         boolean seIntercambio;
-        long inicio = System.currentTimeMillis();
+        long inicio = System.nanoTime();
         for (int i = 0; i < n - 1; i++) {
             seIntercambio = false;
             for (int j = 0; j < n - i - 1; j++) {
@@ -24,13 +22,13 @@ public class BubbleSort {
             }
             if (!seIntercambio) break;
         }
-        long fin = System.currentTimeMillis();
-        tiempoTotal = fin - inicio;
+        long fin = System.nanoTime();
+        double tiempoMs = (fin - inicio) / 1_000_000.0;
         /*
         for (int i = 0; i < arregloPoliticos.length; i++) {
             System.out.println(arregloPoliticos[i]);
         }
         */
-        return new double[] {tiempoTotal, comparaciones, intercambios };
+        return new ResultadoOrdenamiento(tiempoMs, comparaciones, intercambios);
     }
 }

@@ -2,9 +2,9 @@ package com.udistrital.edu.model;
 
 public class InsertionSort {
 
-    public static double[] ordenar(Politico[] arregloPoliticos) {
-        double tiempoTotal, comparaciones=0, intercambios=0;
-        long inicio = System.currentTimeMillis();
+    public static ResultadoOrdenamiento ordenar(Politico[] arregloPoliticos) {
+        int comparaciones=0, intercambios=0;
+        long inicio = System.nanoTime();
         for (int i = 1; i < arregloPoliticos.length; i++) {
             Politico temp = arregloPoliticos[i];
             int j = i - 1;
@@ -23,8 +23,8 @@ public class InsertionSort {
                 comparaciones++;
             }
         }
-        long fin = System.currentTimeMillis();
-        tiempoTotal = fin - inicio;
-        return new double[] {tiempoTotal, comparaciones, intercambios };
+        long fin = System.nanoTime();
+        double tiempoMs = (fin - inicio) / 1000000.0;
+        return new ResultadoOrdenamiento(tiempoMs, comparaciones, intercambios);
     }
 }

@@ -1,6 +1,8 @@
 package com.udistrital.edu.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Generador {
@@ -10,7 +12,7 @@ public class Generador {
     double promedioInterBubble = 0;
     int numArreglos = 0;
     
-    public double[] generarAleatorio(int n, double tasaCrecimiento) {
+    public void generarAleatorio(int n, double tasaCrecimiento, EstadisticasOrdenamiento estadisticas) {
         int idBase = 1000;
         int num = 0;
         Politico[] politicos = null;
@@ -34,7 +36,7 @@ public class Generador {
                 numArreglos += 1;
                 
                 // Llamamos al metodo para que los ordene
-                ordenarArreglo(politicos);
+                ordenarArreglo(politicos, estadisticas);
 
                 // Eliminar referencia al arreglo
                 politicos = null;
@@ -48,13 +50,11 @@ public class Generador {
         } catch (OutOfMemoryError e) {
             System.err.println("Se ha agotado la memoria al intentar generar un arreglo de tamaño: " + n);
         }
-        return new double [] {(promedioTiempoBubble/numArreglos), (promedioCompBubble/numArreglos), (promedioInterBubble/numArreglos)};
     }
     public static void generarOrdenado(int n, double tasaCrecimiento) {
     	int idBase = 1000;
         Politico[] politicos = new Politico[n];
         int dineroBase = 100 + random.nextInt(5000);
-        int nuevoDinero;
         
         try {
             while (true) {
@@ -134,29 +134,62 @@ public class Generador {
             System.err.println("Se ha agotado la memoria al intentar generar un arreglo de tamaño: " + n + "Numero de arrays generados: " + num);
         }
     }
-    public void ordenarArreglo(Politico[] politicos) {
-    	Politico[] copiaArreglo;
-    	double[] forNow;
-    	//Ordenar por Bubble
-    	copiaArreglo = politicos.clone();
-        forNow = BubbleSort.ordenar(copiaArreglo);
-        promedioTiempoBubble += forNow[0];
-        promedioCompBubble += forNow[1];
-        promedioInterBubble += forNow[2];
-        /*
-        System.out.println("Tiempo: "+ forNow[0] + ", Comparaciones: "+ forNow[1] +", Intercambios: "+ forNow[2]); // Borrame soy solo una traza
-        // Ordenar por SelectionSort
-        copiaArreglo = politicos.clone();
-        forNow = SelectionSort.ordenar(copiaArreglo);
-        // Ordenar por InsertionSort
-        copiaArreglo = politicos.clone();
-        forNow = InsertionSort.ordenar(copiaArreglo);
-        // Ordenar por MergeSort
-        copiaArreglo = politicos.clone();
-        forNow = MergeSort.ordenar(copiaArreglo);
-        // Ordenar por QuickSort
-        copiaArreglo = politicos.clone();
-        forNow = QuickSort.ordenar(copiaArreglo);
-        */
+    public void ordenarArreglo(Politico[] politicos, EstadisticasOrdenamiento estadisticas) {
+        List<Thread> hilos = new ArrayList<>();
+
+        Runnable tareaBubble = () -> {
+            Politico[] copia = clonarArreglo(politicos);
+            estadisticas.agregarResultado("BubbleSort", BubbleSort.ordenar(copia));
+            copia = null;
+        };
+        Runnable tareaSelection = () -> {
+            Politico[] copia = clonarArreglo(politicos);
+            estadisticas.agregarResultado("SelectionSort", SelectionSort.ordenar(copia));
+            copia = null;
+        };
+        Runnable tareaInsertion = () -> {
+            Politico[] copia = clonarArreglo(politicos);
+            estadisticas.agregarResultado("InsertionSort", InsertionSort.ordenar(copia));
+            copia = null;
+        };
+        Runnable tareaMerge = () -> {
+            Politico[] copia = clonarArreglo(politicos);
+            estadisticas.agregarResultado("MergeSort", MergeSort.ordenar(copia));
+            copia = null;
+        };
+        Runnable tareaQuick = () -> {
+            Politico[] copia = clonarArreglo(politicos);
+            estadisticas.agregarResultado("QuickSort", QuickSort.ordenar(copia));
+            copia = null;
+        };
+
+        hilos.add(new Thread(tareaBubble));
+        hilos.add(new Thread(tareaSelection));
+        hilos.add(new Thread(tareaInsertion));
+        hilos.add(new Thread(tareaMerge));
+        hilos.add(new Thread(tareaQuick));
+
+        // Iniciar todos los hilos
+        for (Thread hilo : hilos) {
+            hilo.start();
+        }
+
+        // Esperar a que todos terminen
+        for (Thread hilo : hilos) {
+            try {
+                hilo.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.gc(); // Limpiar
+    }
+    private Politico[] clonarArreglo(Politico[] original) {
+        Politico[] copia = new Politico[original.length];
+        for (int i = 0; i < original.length; i++) {
+            copia[i] = original[i].clone();
+        }
+        return copia;
     }
 }
