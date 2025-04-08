@@ -36,7 +36,7 @@ public class ExportarEstadisticas {
             for (Map.Entry<String, ResultadoOrdenamiento> entryAlgoritmo : algoritmos.entrySet()) {
                 String algoritmo = entryAlgoritmo.getKey();
                 ResultadoOrdenamiento r = entryAlgoritmo.getValue();
-                writer.write(String.format("%d,%s,%.4f,%d,%d",
+                writer.write(String.format("%d | %s | %.4f | %d | %d",
                         tamanio,
                         algoritmo,
                         r.tiempo,

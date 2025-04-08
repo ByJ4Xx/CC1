@@ -3,7 +3,7 @@ package com.udistrital.edu.model;
 public class InsertionSort {
 
     public static ResultadoOrdenamiento ordenar(Politico[] arregloPoliticos) {
-        int comparaciones=0, intercambios=0;
+        long comparaciones=0, intercambios=0;
         long inicio = System.nanoTime();
         for (int i = 1; i < arregloPoliticos.length; i++) {
             Politico temp = arregloPoliticos[i];

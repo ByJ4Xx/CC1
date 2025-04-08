@@ -4,7 +4,7 @@ public class BubbleSort {
 
     public static ResultadoOrdenamiento ordenar(Politico[] arregloPoliticos) {
         int n = arregloPoliticos.length;
-        int comparaciones=0, intercambios=0;
+        long comparaciones=0, intercambios=0;
         boolean seIntercambio;
         long inicio = System.nanoTime();
         for (int i = 0; i < n - 1; i++) {

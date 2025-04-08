@@ -2,8 +2,8 @@ package com.udistrital.edu.model;
 
 public class QuickSort {
 
-    private static int comparaciones = 0;
-    private static int intercambios = 0;
+    private static long comparaciones = 0;
+    private static long intercambios = 0;
 
     public static ResultadoOrdenamiento ordenar(Politico[] arr) {
         comparaciones = 0;
