@@ -10,7 +10,6 @@ public class Generador {
     double promedioTiempoBubble = 0;
     double promedioCompBubble = 0;
     double promedioInterBubble = 0;
-    int numArreglos = 0;
     
     public void generarAleatorio(int n, double tasaCrecimiento, EstadisticasOrdenamiento estadisticas) {
         int idBase = 2000;
@@ -31,9 +30,6 @@ public class Generador {
                     //System.out.println(politicos[i]);
                 }
                 
-                System.out.println("Generado arreglo de tamaño: " + n);
-                numArreglos += 1;
-                
                 // Llamamos al metodo para que los ordene
                 ordenarArreglo(politicos, estadisticas);
 
@@ -42,7 +38,7 @@ public class Generador {
                 System.gc(); // Liberar memoria
                 
                 n = (int) Math.round(n * tasaCrecimiento);
-                if (n>=88148) {
+                if (n>=155469300) {
                 	throw new OutOfMemoryError();
                 }
             }
@@ -69,8 +65,6 @@ public class Generador {
                     politicos[i].setFechaNacimiento(LocalDate.of(random.nextInt(60) + 1940, random.nextInt(12) + 1, random.nextInt(28) + 1));
                 }
                 
-                System.out.println("Generado arreglo de tamaño: " + n);
-                
                 // Llamamos al metodo para que los ordene
                 ordenarArreglo(politicos, estadisticas);
                 
@@ -79,7 +73,7 @@ public class Generador {
                 System.gc(); // Liberar memoria
                 
                 n = (int) Math.round(n * tasaCrecimiento);
-                if (n>=88148) {
+                if (n>=155469300) {
                 	throw new OutOfMemoryError();
                 }
             }
@@ -107,8 +101,6 @@ public class Generador {
                     politicos[i].setFechaNacimiento(LocalDate.of(random.nextInt(60) + 1940, random.nextInt(12) + 1, random.nextInt(28) + 1));
                 }
                 
-                System.out.println("Generado arreglo de tamaño: " + n);
-                
                 // Llamamos al metodo para que los ordene
                 ordenarArreglo(politicos, estadisticas);
                 
@@ -117,7 +109,7 @@ public class Generador {
                 idBase = 1000;
                 n = (int) Math.round(n * tasaCrecimiento);
                 // Valor maximo que me dejo Java con 32 GB: 155469300
-                if (n>=88148) {
+                if (n>=155469300) {
                 	throw new OutOfMemoryError();
                 }
             }
