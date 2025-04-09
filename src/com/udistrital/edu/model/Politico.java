@@ -6,11 +6,13 @@ public class Politico {
 	private int id;
     private int dinero;
     private LocalDate fechaNacimiento;
+    private int edad;
     
     public Politico(int id, int dinero, LocalDate fechaNacimiento) {
         this.id = id;
         this.dinero = dinero;
         this.fechaNacimiento = fechaNacimiento;
+        this.edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
     public int compareTo(Politico otro) {
         // Si quieres ordenar por dinero ascendente:
@@ -24,6 +26,14 @@ public class Politico {
     public void setId(int id) { this.id = id; }
     public void setDinero(int dinero) { this.dinero = dinero; }
     public void setFechaNacimiento(LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
     
     @Override
     protected Politico clone() {
@@ -32,6 +42,7 @@ public class Politico {
     
     @Override
     public String toString() {
-        return "Politico{ID=" + id + ", Dinero=" + dinero + ", Nacimiento=" + fechaNacimiento + "}";
+        return "Politico{ID=" + id + ", Dinero=" + dinero + ", Nacimiento=" + fechaNacimiento + 
+        ", Edad="+edad+"}";
     }
 }
